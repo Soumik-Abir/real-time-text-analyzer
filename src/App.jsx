@@ -2,6 +2,7 @@ import React from 'react';
 import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
 import Navbar from './components/Navbar';
 import About from './components/About';
+import Home from './components/Home';
 
 function App() {
   return (
@@ -15,8 +16,5 @@ function App() {
   );
 }
 
-function Home() {
-  return <h2>Home Page</h2>;
-}
 
 export default App;
