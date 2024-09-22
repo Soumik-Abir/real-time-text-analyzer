@@ -7,7 +7,7 @@ const About = () => {
   return (
     <Box
       p={5}
-      bg={colorMode === "light" ? "white" : "rgb(40 80 110)"}
+      bg={colorMode === "light" ? "white" : "gray.700"}
       color={colorMode === "light" ? "gray.800" : "white"}
       minHeight="100vh"
       mt={16}
