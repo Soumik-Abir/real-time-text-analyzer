@@ -34,7 +34,6 @@ export default function Navbar(props) {
         h={16}
         alignItems="center"
         justifyContent="space-between"
-        maxW="1200px"
         mx="auto"
       >
         <Text fontSize="xl" fontWeight="bold">
