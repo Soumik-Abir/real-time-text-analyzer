@@ -32,7 +32,7 @@ const About = () => {
         With an intuitive and responsive design, this tool helps you streamline your text analysis, and for added functionality, any words replaced can be highlighted for easy identification.
       </Text>
       <Text fontSize="lg" mt={4} textAlign="center">
-        Feel free to explore and make the most of these features!
+        Feel free to explore and make the most of these features!😉
       </Text>
     </Box>
   );
