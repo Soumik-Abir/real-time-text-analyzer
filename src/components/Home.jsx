@@ -1,22 +1,48 @@
-import React, { useState } from 'react';
-import { Box, Textarea, Text, Heading, Input, Button, Flex, useColorMode } from '@chakra-ui/react';
+import React, { useState, useEffect } from 'react'; // Import useEffect to manage side effects
+import { Box, Textarea, Text, Heading, Button, Flex, useColorMode } from '@chakra-ui/react';
+import CustomInput from './CustomInput'; 
 
 const Home = () => {
-  const [text, setText] = useState('');
+  
+  const [text, setText] = useState(() => localStorage.getItem('text') || ''); 
   const [target, setTarget] = useState('');
   const [replacement, setReplacement] = useState('');
+  const [highlightedText, setHighlightedText] = useState(() => localStorage.getItem('highlightedText') || '');
   const { colorMode } = useColorMode();
+
+  
+  useEffect(() => {
+    localStorage.setItem('text', text);
+    localStorage.setItem('highlightedText', highlightedText);
+  }, [text, highlightedText]);
 
   const handleTextChange = (event) => {
     setText(event.target.value);
+    setHighlightedText(event.target.value); 
   };
 
   const wordCount = text.trim().split(/\s+/).filter(word => word.length > 0).length;
+  const uniqueWordCount = new Set(
+    text.toLowerCase().trim().split(/\s+/).filter(word => word.length > 0)
+  ).size;
   const charCount = text.length;
 
   const handleReplaceClick = () => {
-    const newText = text.split(target).join(replacement);
+    if (!text.includes(target)) {
+      alert("Input target string not found");
+      return;
+    }
+
+    const regex = new RegExp(target, 'g');
+    const newText = text.replace(regex, replacement);
+    
+    setHighlightedText(newText.replace(
+      new RegExp(replacement, 'g'),
+      (match) => `<span style="background-color: #FFD700">${match}</span>`
+    ));
     setText(newText);
+    setTarget('');
+    setReplacement('');
   };
 
   return (
@@ -54,35 +80,38 @@ const Home = () => {
               Word Count: {wordCount}
             </Text>
             <Text color={colorMode === "light" ? "black" : "white"} fontSize="lg">
+              Unique Word Count: {uniqueWordCount}
+            </Text>
+            <Text color={colorMode === "light" ? "black" : "white"} fontSize="lg">
               Character Count: {charCount}
             </Text>
           </Box>
           <Box>
-            <Input
+            <CustomInput
               placeholder="Target string"
               value={target}
               onChange={(e) => setTarget(e.target.value)}
-              mb={2}
-              bg={colorMode === "light" ? "gray.50" : "gray.800"}
-              color={colorMode === "light" ? "black" : "white"}
-              size="md"
-              css={{ position: 'static' }}
             />
-            <Input
+            <CustomInput
               placeholder="Replacement string"
               value={replacement}
               onChange={(e) => setReplacement(e.target.value)}
-              mb={2}
-              bg={colorMode === "light" ? "gray.50" : "gray.800"}
-              color={colorMode === "light" ? "black" : "white"}
-              size="md"
-              css={{ position: 'static' }}
             />
             <Button onClick={handleReplaceClick} colorScheme="teal" size="md">
               Replace
             </Button>
           </Box>
         </Flex>
+        <Box mt={4}>
+          <Heading as="h2" mb={2}>
+            Preview
+          </Heading>
+          <div
+            dangerouslySetInnerHTML={{
+              __html: highlightedText
+            }}
+          />
+        </Box>
       </Box>
     </Box>
   );
